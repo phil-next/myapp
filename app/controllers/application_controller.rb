@@ -1,5 +1,10 @@
 class ApplicationController < ActionController::Base
 
+    # how to play
+    g = Game.new
+    g.start
+
+
     class Game
         attr_reader :player1, :player2, :player3
     
@@ -7,6 +12,14 @@ class ApplicationController < ActionController::Base
             @player1 = Player.new ("Alice")
             @player2 = Player.new ("Bob")
             @player3 = Player.new ("Carol")
+            @@win = false
+        end
+
+        def start
+            loop do
+                self.turn
+                break if @@win   
+            end
         end
     
         def turn
@@ -16,9 +29,10 @@ class ApplicationController < ActionController::Base
                 # let players play (display status :)
                 player.play
                 # check if player has all cards revealed > win
-                for cardrevealed in [player.card1.revealed, player.card2.revealed, player.card3.revealed, player.card4.revealed, player.card5.revealed] do
-                    #...
-
+                if [player.card1.revealed, player.card2.revealed, player.card3.revealed, player.card4.revealed, player.card5.revealed].all?
+                    @@win = true
+                    puts "Player " + player.name + " wins!" # console print
+                    break
                 end
             end
         end
@@ -37,10 +51,12 @@ class ApplicationController < ActionController::Base
         end
     
         def play
+            # roll the dice
             die = Die.new
+            puts "die colour: " + die.colour + " | player: " + self.name # console print
             # loop through array of cards till colour match > reveal card
             for card in [card1,card2,card3,card4,card5] do
-                if card.colour.colour.to_s == die.colour.to_s # could skip if card is already revealed
+                if card.colour.colour.to_s == die.colour.to_s && !card.revealed # skip if card is already revealed
                     card.reveal
                     break
                 end
