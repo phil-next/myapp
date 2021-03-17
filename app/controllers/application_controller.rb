@@ -31,6 +31,12 @@ class ApplicationController < ActionController::Base
         def play
             die = Die.new
             # go through array of cards till colour match > reveal card
+            for card in [card1,card2,card3,card4,card5] do
+                if card.colour.colour.to_s == die.colour.to_s # could skip if card is already revealed
+                    card.reveal
+                    break
+                end
+            end
         end
     end
     
@@ -45,6 +51,7 @@ class ApplicationController < ActionController::Base
         def reveal 
             @revealed = true
         end
+
     end
     
     class Die
@@ -53,6 +60,7 @@ class ApplicationController < ActionController::Base
         def initialize
             @colour = [ "blue", "red", "yellow", "green", "black", "white" ].sample
         end
+
     end
-    
+
 end
