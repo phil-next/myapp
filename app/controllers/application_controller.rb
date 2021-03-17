@@ -10,9 +10,17 @@ class ApplicationController < ActionController::Base
         end
     
         def turn
+            win = false
             # loop through array of players
+            for player in [player1,player2,player3] do
                 # let players play (display status :)
-            # check if one player has all cards revealed > win
+                player.play
+                # check if player has all cards revealed > win
+                for cardrevealed in [player.card1.revealed, player.card2.revealed, player.card3.revealed, player.card4.revealed, player.card5.revealed] do
+                    #...
+
+                end
+            end
         end
     end
     
@@ -30,7 +38,7 @@ class ApplicationController < ActionController::Base
     
         def play
             die = Die.new
-            # go through array of cards till colour match > reveal card
+            # loop through array of cards till colour match > reveal card
             for card in [card1,card2,card3,card4,card5] do
                 if card.colour.colour.to_s == die.colour.to_s # could skip if card is already revealed
                     card.reveal
